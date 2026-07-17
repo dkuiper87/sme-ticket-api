@@ -1,8 +1,14 @@
 package nl.novi.smeticketapi.services;
+import jakarta.validation.Valid;
+import nl.novi.smeticketapi.dtos.category.CategoryRequestDTO;
 import nl.novi.smeticketapi.dtos.category.CategoryResponseDTO;
+import nl.novi.smeticketapi.entities.CategoryEntity;
 import nl.novi.smeticketapi.mappers.CategoryDTOMapper;
 import nl.novi.smeticketapi.repositories.CategoryRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -22,5 +28,12 @@ public class CategoryService {
     //Method to retrieve a list of all categories
     public List<CategoryResponseDTO> getAllCategories(){
         return categoryDTOMapper.mapToDto(categoryRepository.findAll());
+    }
+
+    //Method to create a new category
+    public CategoryResponseDTO createCategory(CategoryRequestDTO requestDto) {
+        CategoryEntity categoryEntity = categoryDTOMapper.mapToEntity(requestDto);
+        categoryEntity = categoryRepository.save(categoryEntity);
+        return categoryDTOMapper.mapToDto(categoryEntity);
     }
 }
