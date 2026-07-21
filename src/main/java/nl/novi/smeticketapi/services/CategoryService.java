@@ -3,6 +3,7 @@ import jakarta.validation.Valid;
 import nl.novi.smeticketapi.dtos.category.CategoryRequestDTO;
 import nl.novi.smeticketapi.dtos.category.CategoryResponseDTO;
 import nl.novi.smeticketapi.entities.CategoryEntity;
+import nl.novi.smeticketapi.exceptions.RecordNotFoundException;
 import nl.novi.smeticketapi.mappers.CategoryDTOMapper;
 import nl.novi.smeticketapi.repositories.CategoryRepository;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,19 @@ public class CategoryService {
     //Method to retrieve a list of all categories
     public List<CategoryResponseDTO> getAllCategories(){
         return categoryDTOMapper.mapToDto(categoryRepository.findAll());
+    }
+
+    //Private method to retrieve category entity
+    private CategoryEntity getCategoryEntity(Long id){
+        CategoryEntity existingCategoryEntity = categoryRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Category " + id + " not found"));
+        return existingCategoryEntity;
+    }
+
+    //Method to retrieve a specific category by id
+    public CategoryResponseDTO getCategoryById(Long id) {
+        CategoryEntity categoryEntity = getCategoryEntity(id);
+        return categoryDTOMapper.mapToDto(categoryEntity);
     }
 
     //Method to create a new category

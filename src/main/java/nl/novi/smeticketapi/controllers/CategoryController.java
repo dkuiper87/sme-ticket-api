@@ -29,6 +29,13 @@ public class CategoryController {
         return ResponseEntity.ok(categories);
     }
 
+    //GET /categories/{id} - Returns a category by id
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryResponseDTO> getCategoryById(@PathVariable Long id) {
+        CategoryResponseDTO category = categoryService.getCategoryById(id);
+        return ResponseEntity.ok(category);
+    }
+
     //POST /categories - Creates a new category
     @PostMapping
     public ResponseEntity<CategoryResponseDTO> createCategory(@RequestBody @Valid CategoryRequestDTO requestDto){
