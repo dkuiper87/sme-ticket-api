@@ -27,12 +27,12 @@ public class CategoryService {
     //Methods
 
     //Method to retrieve a list of all categories
-    public List<CategoryResponseDTO> getAllCategories(){
+    public List<CategoryResponseDTO> getAllCategories() {
         return categoryDTOMapper.mapToDto(categoryRepository.findAll());
     }
 
     //Private method to retrieve category entity
-    private CategoryEntity getCategoryEntity(Long id){
+    private CategoryEntity getCategoryEntity(Long id) {
         CategoryEntity existingCategoryEntity = categoryRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Category " + id + " not found"));
         return existingCategoryEntity;
@@ -49,5 +49,20 @@ public class CategoryService {
         CategoryEntity categoryEntity = categoryDTOMapper.mapToEntity(requestDto);
         categoryEntity = categoryRepository.save(categoryEntity);
         return categoryDTOMapper.mapToDto(categoryEntity);
+    }
+
+    //Method to edit a category
+    public CategoryResponseDTO updateCategory(Long id, CategoryRequestDTO requestDTO) {
+        CategoryEntity existingCategoryEntity = getCategoryEntity(id);
+        existingCategoryEntity.setName(requestDTO.getName());
+        existingCategoryEntity.setDescription(requestDTO.getDescription());
+        existingCategoryEntity = categoryRepository.save(existingCategoryEntity);
+        return categoryDTOMapper.mapToDto(existingCategoryEntity);
+    }
+
+    //Method to delete a category
+    public void deleteCategory(Long id) {
+        CategoryEntity existingCategory = getCategoryEntity(id);
+        categoryRepository.delete(existingCategory);
     }
 }
