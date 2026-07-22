@@ -13,7 +13,6 @@ public class CategoryDTOMapper implements DTOMapper<CategoryResponseDTO, Categor
 
     @Override
     public CategoryResponseDTO mapToDto(CategoryEntity entity){
-
         var result = new CategoryResponseDTO();
         result.setId(entity.getId());
         result.setDescription(entity.getDescription());
