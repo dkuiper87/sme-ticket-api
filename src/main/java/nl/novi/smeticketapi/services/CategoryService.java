@@ -45,8 +45,8 @@ public class CategoryService {
     }
 
     //Method to create a new category
-    public CategoryResponseDTO createCategory(CategoryRequestDTO requestDto) {
-        CategoryEntity categoryEntity = categoryDTOMapper.mapToEntity(requestDto);
+    public CategoryResponseDTO createCategory(CategoryRequestDTO requestDTO) {
+        CategoryEntity categoryEntity = categoryDTOMapper.mapToEntity(requestDTO);
         categoryEntity = categoryRepository.save(categoryEntity);
         return categoryDTOMapper.mapToDto(categoryEntity);
     }

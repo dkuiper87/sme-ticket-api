@@ -37,8 +37,8 @@ public class CategoryController {
 
     //POST /categories - Creates a new category
     @PostMapping
-    public ResponseEntity<CategoryResponseDTO> createCategory(@RequestBody @Valid CategoryRequestDTO requestDto) {
-        CategoryResponseDTO newCategory = categoryService.createCategory(requestDto);
+    public ResponseEntity<CategoryResponseDTO> createCategory(@RequestBody @Valid CategoryRequestDTO requestDTO) {
+        CategoryResponseDTO newCategory = categoryService.createCategory(requestDTO);
 
         URI location = org.springframework.web.servlet.support.ServletUriComponentsBuilder
                 .fromCurrentRequest()
