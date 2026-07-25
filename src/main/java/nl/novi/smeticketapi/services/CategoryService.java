@@ -1,15 +1,13 @@
 package nl.novi.smeticketapi.services;
-import jakarta.validation.Valid;
+
 import nl.novi.smeticketapi.dtos.category.CategoryRequestDTO;
 import nl.novi.smeticketapi.dtos.category.CategoryResponseDTO;
 import nl.novi.smeticketapi.entities.CategoryEntity;
 import nl.novi.smeticketapi.exceptions.RecordNotFoundException;
 import nl.novi.smeticketapi.mappers.CategoryDTOMapper;
 import nl.novi.smeticketapi.repositories.CategoryRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 
 import java.util.List;
 

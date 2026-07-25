@@ -5,8 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "categories")
-public class CategoryEntity extends BaseEntity {
+@Table(name = "courses")
+public class CourseEntity extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     private String name;
@@ -14,7 +14,7 @@ public class CategoryEntity extends BaseEntity {
     private String description;
 
     //Constructor
-    public CategoryEntity(){
+    public CourseEntity(){
     }
 
     //Getters and Setters
@@ -24,3 +24,4 @@ public class CategoryEntity extends BaseEntity {
     public String getDescription(){return description;}
     public void setDescription(String description){this.description = description;}
 }
+
