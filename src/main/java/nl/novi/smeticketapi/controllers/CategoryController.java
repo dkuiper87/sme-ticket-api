@@ -16,9 +16,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     //Constructor
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
+    public CategoryController(CategoryService categoryService) {this.categoryService = categoryService;}
 
     //Endpoints
     //GET /categories - Returns a list of all categories
