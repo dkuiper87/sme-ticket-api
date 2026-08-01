@@ -3,6 +3,7 @@ package nl.novi.smeticketapi.controllers;
 import jakarta.validation.Valid;
 import nl.novi.smeticketapi.dtos.ticket.TicketRequestDTO;
 import nl.novi.smeticketapi.dtos.ticket.TicketResponseDTO;
+import nl.novi.smeticketapi.dtos.ticket.TicketUpdateRequestDTO;
 import nl.novi.smeticketapi.services.TicketService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,5 +47,12 @@ public class TicketController {
                 .toUri();
 
         return ResponseEntity.created(location).body(newTicket);
+    }
+
+    //PATCH /tickets/{"/id"} - Claim ticket and/or update ticket status
+    @PatchMapping("/{id}")
+    public ResponseEntity<TicketResponseDTO> updateTicket(@PathVariable Long id, @RequestBody TicketUpdateRequestDTO requestDTO) {
+        TicketResponseDTO updatedTicket = ticketService.updateTicket(id, requestDTO);
+        return ResponseEntity.ok(updatedTicket);
     }
 }

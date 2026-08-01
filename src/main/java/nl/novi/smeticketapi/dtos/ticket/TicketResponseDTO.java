@@ -4,6 +4,7 @@ import nl.novi.smeticketapi.dtos.category.CategoryResponseDTO;
 import nl.novi.smeticketapi.dtos.course.CourseResponseDTO;
 import nl.novi.smeticketapi.dtos.tag.TagResponseDTO;
 import nl.novi.smeticketapi.dtos.user.UserResponseDTO;
+import nl.novi.smeticketapi.enums.TicketStatus;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -13,7 +14,7 @@ public class TicketResponseDTO {
     private Long id;
     private String title;
     private String description;
-    private String status;
+    private TicketStatus status;
     private LocalDateTime createdAt;
     private UserResponseDTO student;
     private UserResponseDTO sme;
@@ -32,8 +33,8 @@ public class TicketResponseDTO {
     public String getDescription() {return description;}
     public void setDescription(String description) {this.description = description;}
 
-    public String getStatus() {return status;}
-    public void setStatus(String status) {this.status = status;}
+    public TicketStatus getStatus() {return status;}
+    public void setStatus(TicketStatus status) {this.status = status;}
 
     public LocalDateTime getCreatedAt() {return createdAt;}
     public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}

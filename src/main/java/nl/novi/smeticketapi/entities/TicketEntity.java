@@ -1,6 +1,7 @@
 package nl.novi.smeticketapi.entities;
 
 import jakarta.persistence.*;
+import nl.novi.smeticketapi.enums.TicketStatus;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -17,8 +18,9 @@ public class TicketEntity extends BaseEntity{
     @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
 
-    @Column
-    private String status = "OPEN";
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TicketStatus status = TicketStatus.OPEN;
 
     @CreationTimestamp
     @Column(updatable = false)
@@ -58,8 +60,8 @@ public class TicketEntity extends BaseEntity{
     public String getDescription() {return description;}
     public void setDescription(String description) {this.description = description;}
 
-    public String getStatus() {return status;}
-    public void setStatus(String status) {this.status = status;}
+    public TicketStatus getStatus() {return status;}
+    public void setStatus(TicketStatus status) {this.status = status;}
 
     public LocalDateTime getCreatedAt() {return createdAt;}
     public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}

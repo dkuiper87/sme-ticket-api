@@ -2,10 +2,12 @@ package nl.novi.smeticketapi.services;
 
 import nl.novi.smeticketapi.dtos.ticket.TicketRequestDTO;
 import nl.novi.smeticketapi.dtos.ticket.TicketResponseDTO;
+import nl.novi.smeticketapi.dtos.ticket.TicketUpdateRequestDTO;
 import nl.novi.smeticketapi.entities.CategoryEntity;
 import nl.novi.smeticketapi.entities.CourseEntity;
 import nl.novi.smeticketapi.entities.TicketEntity;
 import nl.novi.smeticketapi.entities.UserEntity;
+import nl.novi.smeticketapi.enums.TicketStatus;
 import nl.novi.smeticketapi.exceptions.RecordNotFoundException;
 import nl.novi.smeticketapi.mappers.TicketDTOMapper;
 import nl.novi.smeticketapi.repositories.CategoryRepository;
@@ -93,13 +95,25 @@ public class TicketService {
         return ticketDTOMapper.mapToDto(ticketEntity);
     }
 
-    //Method for sme to claim a ticket
-
-    //Method for sme to change the status of a ticket
+    //Method for sme to claim and/or change the status of a ticket
+    public TicketResponseDTO updateTicket(Long id, TicketUpdateRequestDTO requestDTO) {
+        TicketEntity existingTicketEntity = getTicketEntity(id);
+        if(requestDTO.getStatus() != null) {
+            existingTicketEntity.setStatus(requestDTO.getStatus());
+        }
+        if(requestDTO.getSmeUsername() != null) {
+            UserEntity sme = getUserEntity(requestDTO.getSmeUsername());
+            if(existingTicketEntity.getStatus() == TicketStatus.OPEN) {
+                existingTicketEntity.setStatus(TicketStatus.IN_BEHANDELING);
+            }
+            existingTicketEntity.setSme(sme);
+        }
+        existingTicketEntity = ticketRepository.save(existingTicketEntity);
+        return ticketDTOMapper.mapToDto(existingTicketEntity);
+    }
 
     //Method for sme to add tags to a ticket
 
-    //Method to update a ticket
 
     //Method to delete a ticket
 }
