@@ -3,6 +3,7 @@ package nl.novi.smeticketapi.controllers;
 import jakarta.validation.Valid;
 import nl.novi.smeticketapi.dtos.ticket.TicketRequestDTO;
 import nl.novi.smeticketapi.dtos.ticket.TicketResponseDTO;
+import nl.novi.smeticketapi.dtos.ticket.TicketTagRequestDTO;
 import nl.novi.smeticketapi.dtos.ticket.TicketUpdateRequestDTO;
 import nl.novi.smeticketapi.services.TicketService;
 import org.springframework.http.ResponseEntity;
@@ -54,5 +55,19 @@ public class TicketController {
     public ResponseEntity<TicketResponseDTO> updateTicket(@PathVariable Long id, @RequestBody TicketUpdateRequestDTO requestDTO) {
         TicketResponseDTO updatedTicket = ticketService.updateTicket(id, requestDTO);
         return ResponseEntity.ok(updatedTicket);
+    }
+
+    //PUT /tickets/{/id}/tags - Update tags assigned to the ticket
+    @PutMapping("/{id}/tags")
+    public ResponseEntity<TicketResponseDTO> updateTicketTags(@PathVariable Long id, @RequestBody TicketTagRequestDTO requestDTO) {
+        TicketResponseDTO updatedTicket = ticketService.updateTicketTags(id, requestDTO.getTagIds());
+        return ResponseEntity.ok(updatedTicket);
+    }
+
+    //DELETE /tickets/{id} - Delete a ticket
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTicket(@PathVariable Long id) {
+        ticketService.deleteTicket(id);
+        return ResponseEntity.noContent().build();
     }
 }

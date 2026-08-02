@@ -3,20 +3,16 @@ package nl.novi.smeticketapi.services;
 import nl.novi.smeticketapi.dtos.ticket.TicketRequestDTO;
 import nl.novi.smeticketapi.dtos.ticket.TicketResponseDTO;
 import nl.novi.smeticketapi.dtos.ticket.TicketUpdateRequestDTO;
-import nl.novi.smeticketapi.entities.CategoryEntity;
-import nl.novi.smeticketapi.entities.CourseEntity;
-import nl.novi.smeticketapi.entities.TicketEntity;
-import nl.novi.smeticketapi.entities.UserEntity;
+import nl.novi.smeticketapi.entities.*;
 import nl.novi.smeticketapi.enums.TicketStatus;
 import nl.novi.smeticketapi.exceptions.RecordNotFoundException;
 import nl.novi.smeticketapi.mappers.TicketDTOMapper;
-import nl.novi.smeticketapi.repositories.CategoryRepository;
-import nl.novi.smeticketapi.repositories.CourseRepository;
-import nl.novi.smeticketapi.repositories.TicketRepository;
-import nl.novi.smeticketapi.repositories.UserRepository;
+import nl.novi.smeticketapi.repositories.*;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class TicketService {
@@ -24,6 +20,7 @@ public class TicketService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final CourseRepository courseRepository;
+    private final TagRepository tagRepository;
     private final TicketDTOMapper ticketDTOMapper;
 
     //Constructor
@@ -32,12 +29,14 @@ public class TicketService {
             UserRepository userRepository,
             CategoryRepository categoryRepository,
             CourseRepository courseRepository,
+            TagRepository tagRepository,
             TicketDTOMapper ticketDTOMapper
     ){
         this.ticketRepository = ticketRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
         this.courseRepository = courseRepository;
+        this.tagRepository = tagRepository;
         this.ticketDTOMapper = ticketDTOMapper;
     }
 
@@ -76,6 +75,13 @@ public class TicketService {
         return courseEntity;
     }
 
+    //Private method to retrieve tag entity
+    private TagEntity getTagEntity(Long id) {
+        TagEntity tagEntity = tagRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Tag " + id + " not found"));
+        return tagEntity;
+    }
+
     //Method to retrieve a specific ticket by id
     public TicketResponseDTO getTicketById(Long id) {
         TicketEntity ticketEntity = getTicketEntity(id);
@@ -112,8 +118,21 @@ public class TicketService {
         return ticketDTOMapper.mapToDto(existingTicketEntity);
     }
 
-    //Method for sme to add tags to a ticket
-
+    //Method for sme to update ticket tags
+    public TicketResponseDTO updateTicketTags(Long id, Set<Long> tagIds) {
+        TicketEntity existingTicketEntity = getTicketEntity(id);
+        Set<TagEntity> tagEntitySet = new HashSet<>();
+        for (Long tagId :  tagIds) {
+            tagEntitySet.add(getTagEntity(tagId));
+        }
+        existingTicketEntity.setTags(tagEntitySet);
+        existingTicketEntity = ticketRepository.save(existingTicketEntity);
+        return ticketDTOMapper.mapToDto(existingTicketEntity);
+    }
 
     //Method to delete a ticket
+    public void deleteTicket(Long id) {
+        TicketEntity existingTicket = getTicketEntity(id);
+        ticketRepository.delete(existingTicket);
+    }
 }
