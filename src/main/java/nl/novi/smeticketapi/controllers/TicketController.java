@@ -5,6 +5,7 @@ import nl.novi.smeticketapi.dtos.ticket.TicketRequestDTO;
 import nl.novi.smeticketapi.dtos.ticket.TicketResponseDTO;
 import nl.novi.smeticketapi.dtos.ticket.TicketTagRequestDTO;
 import nl.novi.smeticketapi.dtos.ticket.TicketUpdateRequestDTO;
+import nl.novi.smeticketapi.enums.TicketStatus;
 import nl.novi.smeticketapi.services.TicketService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +22,25 @@ public class TicketController {
     public TicketController(TicketService ticketService) {this.ticketService = ticketService;}
 
     //Endpoints
-    //GET /tickets - Returns a list of all tickets
+    //GET /tickets - Returns a list of tickets
     @GetMapping
-    public ResponseEntity<List<TicketResponseDTO>> getAllTickets() {
-        List<TicketResponseDTO> tickets = ticketService.getAllTickets();
+    public ResponseEntity<List<TicketResponseDTO>> getAllTickets(
+            @RequestParam(value = "student", required = false) String studentUsername,
+            @RequestParam(value = "sme", required = false) String smeUsername,
+            @RequestParam(value = "status", required = false) TicketStatus status
+    ) {
+        List<TicketResponseDTO> tickets;
+
+        if (studentUsername != null) {
+            tickets = ticketService.getAllTicketsByStudentUsername(studentUsername);
+        } else if (smeUsername != null) {
+            tickets = ticketService.getAllTicketsBySmeUsername(smeUsername);
+        } else if (status != null) {
+            tickets = ticketService.getAllTicketsByStatus(status);
+        } else {
+            tickets = ticketService.getAllTickets();
+        }
+
         return ResponseEntity.ok(tickets);
     }
 
@@ -70,4 +86,5 @@ public class TicketController {
         ticketService.deleteTicket(id);
         return ResponseEntity.noContent().build();
     }
+
 }

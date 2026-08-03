@@ -135,4 +135,21 @@ public class TicketService {
         TicketEntity existingTicket = getTicketEntity(id);
         ticketRepository.delete(existingTicket);
     }
+
+    //Filter methods
+
+    //Method to retrieve a list of all tickets by a specific student
+    public List<TicketResponseDTO> getAllTicketsByStudentUsername(String username) {
+        return ticketDTOMapper.mapToDto(ticketRepository.findByStudent_Username(username));
+    }
+
+    //Method to retrieve a list of all tickets claimed by a specific sme
+    public List<TicketResponseDTO> getAllTicketsBySmeUsername(String username) {
+        return ticketDTOMapper.mapToDto(ticketRepository.findBySme_Username(username));
+    }
+
+    //Method to retrieve a list of all tickets with a certain status
+    public List<TicketResponseDTO> getAllTicketsByStatus(TicketStatus status) {
+        return ticketDTOMapper.mapToDto(ticketRepository.findByStatus(status));
+    }
 }
