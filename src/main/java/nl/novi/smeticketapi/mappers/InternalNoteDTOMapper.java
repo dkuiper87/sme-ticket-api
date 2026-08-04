@@ -2,7 +2,6 @@ package nl.novi.smeticketapi.mappers;
 
 import nl.novi.smeticketapi.dtos.internalnote.InternalNoteRequestDTO;
 import nl.novi.smeticketapi.dtos.internalnote.InternalNoteResponseDTO;
-import nl.novi.smeticketapi.dtos.ticket.TicketResponseDTO;
 import nl.novi.smeticketapi.entities.InternalNoteEntity;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +27,7 @@ public class InternalNoteDTOMapper implements DTOMapper<InternalNoteResponseDTO,
     }
 
     @Override
-    public List<TicketResponseDTO> mapToDto(List<InternalNoteEntity> entities) {
+    public List<InternalNoteResponseDTO> mapToDto(List<InternalNoteEntity> entities) {
         var result = new ArrayList<InternalNoteResponseDTO>();
         for (InternalNoteEntity entity : entities) {
             result.add(mapToDto(entity));

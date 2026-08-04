@@ -1,11 +1,14 @@
 package nl.novi.smeticketapi.controllers;
 
 import jakarta.validation.Valid;
+import nl.novi.smeticketapi.dtos.internalnote.InternalNoteRequestDTO;
+import nl.novi.smeticketapi.dtos.internalnote.InternalNoteResponseDTO;
 import nl.novi.smeticketapi.dtos.ticket.TicketRequestDTO;
 import nl.novi.smeticketapi.dtos.ticket.TicketResponseDTO;
 import nl.novi.smeticketapi.dtos.ticket.TicketTagRequestDTO;
 import nl.novi.smeticketapi.dtos.ticket.TicketUpdateRequestDTO;
 import nl.novi.smeticketapi.enums.TicketStatus;
+import nl.novi.smeticketapi.services.InternalNoteService;
 import nl.novi.smeticketapi.services.TicketService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +20,13 @@ import java.util.List;
 @RequestMapping("/tickets")
 public class TicketController {
     private final TicketService ticketService;
+    private final InternalNoteService internalNoteService;
 
     //Constructor
-    public TicketController(TicketService ticketService) {this.ticketService = ticketService;}
+    public TicketController(TicketService ticketService, InternalNoteService internalNoteService) {
+        this.ticketService = ticketService;
+        this.internalNoteService = internalNoteService;
+    }
 
     //Endpoints
     //GET /tickets - Returns a list of tickets
@@ -84,6 +91,30 @@ public class TicketController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTicket(@PathVariable Long id) {
         ticketService.deleteTicket(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // POST /tickets/{id}/notes - Create a new internal note for a ticket
+    @PostMapping("/{id}/notes")
+    public ResponseEntity<InternalNoteResponseDTO> createInternalNote(
+            @PathVariable("id") Long ticketId,
+            @Valid @RequestBody InternalNoteRequestDTO requestDTO) {
+
+        InternalNoteResponseDTO createdNote = internalNoteService.createInternalNote(ticketId, requestDTO);
+
+        URI location = org.springframework.web.servlet.support.ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{noteId}")
+                .buildAndExpand(createdNote.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(createdNote);
+    }
+
+    // DELETE /tickets/notes/{noteId} - Delete an internal note
+    @DeleteMapping("/notes/{noteId}")
+    public ResponseEntity<Void> deleteInternalNote(@PathVariable Long noteId) {
+        internalNoteService.deleteInternalNote(noteId);
         return ResponseEntity.noContent().build();
     }
 

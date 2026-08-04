@@ -9,7 +9,6 @@ public class InternalNoteResponseDTO {
     private Long id;
     private String noteText;
     private LocalDateTime createdAt;
-    private TicketResponseDTO ticket;
     private UserResponseDTO sme;
 
     //Getters and setters
@@ -21,9 +20,6 @@ public class InternalNoteResponseDTO {
 
     public LocalDateTime getCreatedAt() {return createdAt;}
     public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}
-
-    public TicketResponseDTO getTicket() {return ticket;}
-    public void setTicket(TicketResponseDTO ticket) {this.ticket = ticket;}
 
     public UserResponseDTO getSme() {return sme;}
     public void setSme(UserResponseDTO sme) {this.sme = sme;}
