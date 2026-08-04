@@ -18,17 +18,20 @@ public class TicketDTOMapper implements DTOMapper<TicketResponseDTO, TicketReque
     private final CategoryDTOMapper categoryDTOMapper;
     private final CourseDTOMapper courseDTOMapper;
     private final TagDTOMapper tagDTOMapper;
+    private final InternalNoteDTOMapper internalNoteDTOMapper;
 
     public TicketDTOMapper(
             UserDTOMapper userDTOMapper,
             CategoryDTOMapper categoryDTOMapper,
             CourseDTOMapper courseDTOMapper,
-            TagDTOMapper tagDTOMapper
+            TagDTOMapper tagDTOMapper,
+            InternalNoteDTOMapper internalNoteDTOMapper
             ){
                 this.userDTOMapper = userDTOMapper;
                 this.categoryDTOMapper = categoryDTOMapper;
                 this.courseDTOMapper = courseDTOMapper;
                 this.tagDTOMapper = tagDTOMapper;
+                this.internalNoteDTOMapper = internalNoteDTOMapper;
     }
 
     @Override
@@ -45,12 +48,15 @@ public class TicketDTOMapper implements DTOMapper<TicketResponseDTO, TicketReque
         }
         result.setCategory(categoryDTOMapper.mapToDto(entity.getCategory()));
         result.setCourse(courseDTOMapper.mapToDto(entity.getCourse()));
-        if (entity.getTags() != null) {
+        if(entity.getTags() != null) {
             Set<TagResponseDTO> tagDTOs = new HashSet<>();
-            for (TagEntity tagEntity : entity.getTags()) {
+            for(TagEntity tagEntity : entity.getTags()) {
                 tagDTOs.add(tagDTOMapper.mapToDto(tagEntity));
             }
             result.setTags(tagDTOs);
+        }
+        if(entity.getInternalNotes() != null) {
+            result.setNotes(internalNoteDTOMapper.mapToDto(entity.getInternalNotes()));
         }
         return result;
     }

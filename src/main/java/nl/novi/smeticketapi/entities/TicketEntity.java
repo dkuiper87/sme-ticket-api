@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -50,6 +51,9 @@ public class TicketEntity extends BaseEntity{
     )
     private Set<TagEntity> tags = new HashSet<>();
 
+    @OneToMany(mappedBy = "ticket")
+    private List<InternalNoteEntity> internalNotes;
+
     //Constructor
     public TicketEntity() {}
 
@@ -80,4 +84,7 @@ public class TicketEntity extends BaseEntity{
 
     public Set<TagEntity> getTags() {return tags;}
     public void setTags(Set<TagEntity> tags) {this.tags = tags;}
+
+    public List<InternalNoteEntity> getInternalNotes() {return internalNotes;}
+    public void setInternalNotes(List<InternalNoteEntity> internalNotes) {this.internalNotes = internalNotes;}
 }

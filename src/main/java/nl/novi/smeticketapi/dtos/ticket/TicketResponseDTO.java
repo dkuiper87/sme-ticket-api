@@ -2,12 +2,15 @@ package nl.novi.smeticketapi.dtos.ticket;
 
 import nl.novi.smeticketapi.dtos.category.CategoryResponseDTO;
 import nl.novi.smeticketapi.dtos.course.CourseResponseDTO;
+import nl.novi.smeticketapi.dtos.internalnote.InternalNoteResponseDTO;
 import nl.novi.smeticketapi.dtos.tag.TagResponseDTO;
 import nl.novi.smeticketapi.dtos.user.UserResponseDTO;
 import nl.novi.smeticketapi.enums.TicketStatus;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class TicketResponseDTO {
@@ -21,6 +24,7 @@ public class TicketResponseDTO {
     private CategoryResponseDTO category;
     private CourseResponseDTO course;
     private Set<TagResponseDTO> tags = new HashSet<>();
+    private List<InternalNoteResponseDTO> notes = new ArrayList<>();
 
     //Getters and setters
 
@@ -53,4 +57,7 @@ public class TicketResponseDTO {
 
     public Set<TagResponseDTO> getTags() {return tags;}
     public void setTags(Set<TagResponseDTO> tags) {this.tags = tags;}
+
+    public List<InternalNoteResponseDTO> getNotes() {return notes;}
+    public void setNotes(List<InternalNoteResponseDTO> notes) {this.notes = notes;}
 }
