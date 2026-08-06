@@ -19,19 +19,22 @@ public class TicketDTOMapper implements DTOMapper<TicketResponseDTO, TicketReque
     private final CourseDTOMapper courseDTOMapper;
     private final TagDTOMapper tagDTOMapper;
     private final InternalNoteDTOMapper internalNoteDTOMapper;
+    private final AttachmentDTOMapper attachmentDTOMapper;
 
     public TicketDTOMapper(
             UserDTOMapper userDTOMapper,
             CategoryDTOMapper categoryDTOMapper,
             CourseDTOMapper courseDTOMapper,
             TagDTOMapper tagDTOMapper,
-            InternalNoteDTOMapper internalNoteDTOMapper
+            InternalNoteDTOMapper internalNoteDTOMapper,
+            AttachmentDTOMapper attachmentDTOMapper
             ){
                 this.userDTOMapper = userDTOMapper;
                 this.categoryDTOMapper = categoryDTOMapper;
                 this.courseDTOMapper = courseDTOMapper;
                 this.tagDTOMapper = tagDTOMapper;
                 this.internalNoteDTOMapper = internalNoteDTOMapper;
+                this.attachmentDTOMapper = attachmentDTOMapper;
     }
 
     @Override
@@ -57,6 +60,9 @@ public class TicketDTOMapper implements DTOMapper<TicketResponseDTO, TicketReque
         }
         if(entity.getInternalNotes() != null) {
             result.setNotes(internalNoteDTOMapper.mapToDto(entity.getInternalNotes()));
+        }
+        if(entity.getAttachments() != null) {
+            result.setAttachments(attachmentDTOMapper.mapToDto(entity.getAttachments()));
         }
         return result;
     }

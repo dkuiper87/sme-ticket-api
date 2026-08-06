@@ -54,6 +54,9 @@ public class TicketEntity extends BaseEntity{
     @OneToMany(mappedBy = "ticket")
     private List<InternalNoteEntity> internalNotes;
 
+    @OneToMany(mappedBy = "ticket")
+    private List<AttachmentEntity> attachments;
+
     //Constructor
     public TicketEntity() {}
 
@@ -87,4 +90,7 @@ public class TicketEntity extends BaseEntity{
 
     public List<InternalNoteEntity> getInternalNotes() {return internalNotes;}
     public void setInternalNotes(List<InternalNoteEntity> internalNotes) {this.internalNotes = internalNotes;}
+
+    public List<AttachmentEntity> getAttachments() {return attachments;}
+    public void setAttachments(List<AttachmentEntity> attachments) {this.attachments = attachments;}
 }

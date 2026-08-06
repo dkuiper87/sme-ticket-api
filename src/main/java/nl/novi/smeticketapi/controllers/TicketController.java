@@ -1,17 +1,21 @@
 package nl.novi.smeticketapi.controllers;
 
 import jakarta.validation.Valid;
+import nl.novi.smeticketapi.dtos.attachment.AttachmentResponseDTO;
 import nl.novi.smeticketapi.dtos.internalnote.InternalNoteRequestDTO;
 import nl.novi.smeticketapi.dtos.internalnote.InternalNoteResponseDTO;
 import nl.novi.smeticketapi.dtos.ticket.TicketRequestDTO;
 import nl.novi.smeticketapi.dtos.ticket.TicketResponseDTO;
 import nl.novi.smeticketapi.dtos.ticket.TicketTagRequestDTO;
 import nl.novi.smeticketapi.dtos.ticket.TicketUpdateRequestDTO;
+import nl.novi.smeticketapi.entities.AttachmentEntity;
 import nl.novi.smeticketapi.enums.TicketStatus;
+import nl.novi.smeticketapi.services.AttachmentService;
 import nl.novi.smeticketapi.services.InternalNoteService;
 import nl.novi.smeticketapi.services.TicketService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
@@ -21,11 +25,17 @@ import java.util.List;
 public class TicketController {
     private final TicketService ticketService;
     private final InternalNoteService internalNoteService;
+    private final AttachmentService attachmentService;
 
     //Constructor
-    public TicketController(TicketService ticketService, InternalNoteService internalNoteService) {
+    public TicketController(
+            TicketService ticketService,
+            InternalNoteService internalNoteService,
+            AttachmentService attachmentService
+    ) {
         this.ticketService = ticketService;
         this.internalNoteService = internalNoteService;
+        this.attachmentService = attachmentService;
     }
 
     //Endpoints
@@ -94,7 +104,7 @@ public class TicketController {
         return ResponseEntity.noContent().build();
     }
 
-    // POST /tickets/{id}/notes - Create a new internal note for a ticket
+    //POST /tickets/{id}/notes - Create a new internal note for a ticket
     @PostMapping("/{id}/notes")
     public ResponseEntity<InternalNoteResponseDTO> createInternalNote(
             @PathVariable("id") Long ticketId,
@@ -111,11 +121,37 @@ public class TicketController {
         return ResponseEntity.created(location).body(createdNote);
     }
 
-    // DELETE /tickets/notes/{noteId} - Delete an internal note
+    //DELETE /tickets/notes/{noteId} - Delete an internal note
     @DeleteMapping("/notes/{noteId}")
     public ResponseEntity<Void> deleteInternalNote(@PathVariable Long noteId) {
         internalNoteService.deleteInternalNote(noteId);
         return ResponseEntity.noContent().build();
     }
 
+    //POST /tickets/{id}/attachments - Uploads a file and attaches it to the ticket
+    @PostMapping("/{id}/attachments")
+    public ResponseEntity<AttachmentResponseDTO> uploadAttachment(
+            @PathVariable("id") Long ticketId,
+            @RequestParam("file") MultipartFile file) {
+
+        AttachmentResponseDTO uploadedAttachment = attachmentService.uploadAttachment(ticketId, file);
+
+        URI location = org.springframework.web.servlet.support.ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{attachmentId}")
+                .buildAndExpand(uploadedAttachment.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(uploadedAttachment);
+    }
+
+    //GET /tickets/attachments/{attachmentId} - Download a specific attachment
+    @GetMapping("/attachments/{attachmentId}")
+    public ResponseEntity<byte[]> downloadAttachment(@PathVariable Long attachmentId) {
+        AttachmentEntity attachment = attachmentService.downloadAttachment(attachmentId);
+        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+        headers.set(org.springframework.http.HttpHeaders.CONTENT_TYPE, attachment.getContentType());
+        headers.set(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + attachment.getFileName() + "\"");
+        return new ResponseEntity<>(attachment.getBytes(), headers, org.springframework.http.HttpStatus.OK);
+    }
 }

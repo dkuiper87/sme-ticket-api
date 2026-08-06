@@ -9,12 +9,14 @@ import nl.novi.smeticketapi.exceptions.RecordNotFoundException;
 import nl.novi.smeticketapi.mappers.TicketDTOMapper;
 import nl.novi.smeticketapi.repositories.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Service
+@Transactional
 public class TicketService {
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
