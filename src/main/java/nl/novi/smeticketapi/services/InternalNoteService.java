@@ -61,11 +61,11 @@ public class InternalNoteService {
     }
 
     //Method to create a new internal note
-    public InternalNoteResponseDTO createInternalNote(Long ticketId, InternalNoteRequestDTO requestDTO) {
+    public InternalNoteResponseDTO createInternalNote(Long ticketId, InternalNoteRequestDTO requestDTO, String smeUsername) {
         InternalNoteEntity internalNoteEntity = internalNoteDTOMapper.mapToEntity(requestDTO);
         TicketEntity ticketEntity = getTicketEntity(ticketId);
         internalNoteEntity.setTicket(ticketEntity);
-        UserEntity smeEntity = getUserEntity(requestDTO.getSmeUsername());
+        UserEntity smeEntity = getUserEntity(smeUsername);
         internalNoteEntity.setSme(smeEntity);
         internalNoteEntity = internalNoteRepository.save(internalNoteEntity);
         return internalNoteDTOMapper.mapToDto(internalNoteEntity);
@@ -76,5 +76,4 @@ public class InternalNoteService {
         InternalNoteEntity existingInternalNote = getInternalNoteEntity(id);
         internalNoteRepository.delete(existingInternalNote);
     }
-
 }

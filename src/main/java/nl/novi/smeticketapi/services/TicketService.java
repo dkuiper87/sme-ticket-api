@@ -90,10 +90,10 @@ public class TicketService {
         return ticketDTOMapper.mapToDto(ticketEntity);
     }
 
-    //Method to create a new ticket
-    public TicketResponseDTO createTicket(TicketRequestDTO requestDTO) {
+    // Method to create a new ticket
+    public TicketResponseDTO createTicket(TicketRequestDTO requestDTO, String studentUsername) {
         TicketEntity ticketEntity = ticketDTOMapper.mapToEntity(requestDTO);
-        UserEntity studentEntity = getUserEntity(requestDTO.getStudentUsername());
+        UserEntity studentEntity = getUserEntity(studentUsername);
         ticketEntity.setStudent(studentEntity);
         CategoryEntity categoryEntity = getCategoryEntity(requestDTO.getCategoryId());
         ticketEntity.setCategory(categoryEntity);

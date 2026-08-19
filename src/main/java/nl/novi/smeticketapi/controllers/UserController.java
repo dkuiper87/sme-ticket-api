@@ -34,7 +34,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    //POST /users - Creates a new category
+    //POST /users - Creates a new user
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUser(@RequestBody @Valid UserRequestDTO requestDTO) {
         UserResponseDTO newUser = userService.createUser(requestDTO);
