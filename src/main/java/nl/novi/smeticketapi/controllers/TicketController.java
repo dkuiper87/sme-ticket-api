@@ -59,13 +59,11 @@ public class TicketController {
 
         List<TicketResponseDTO> tickets;
 
-        if (isAdmin) {
+        if (isAdmin || isSme) {
             if (studentUsername != null) tickets = ticketService.getAllTicketsByStudentUsername(studentUsername);
             else if (smeUsername != null) tickets = ticketService.getAllTicketsBySmeUsername(smeUsername);
             else if (status != null) tickets = ticketService.getAllTicketsByStatus(status);
             else tickets = ticketService.getAllTickets();
-        } else if (isSme) {
-            tickets = ticketService.getAllTicketsBySmeUsername(loggedInUser);
         } else {
             tickets = ticketService.getAllTicketsByStudentUsername(loggedInUser);
         }
